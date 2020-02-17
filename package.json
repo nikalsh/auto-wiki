@@ -1,0 +1,20 @@
+{
+  "name": "wikitest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "vuepress": "^1.2.0",
+    "vuepress-auto-sidebar": "^1.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd docs && vuepress build"
+  },
+  "author": "",
+  "license": "ISC"
+}

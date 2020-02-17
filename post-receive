@@ -1,0 +1,38 @@
+#!/bin/bash
+TARGET="/path/to/tempfolder"
+GIT_DIR="/path/to/central/gitrepo"
+BRANCH="master"
+DEPLOY_TARGET="/path/to/your/webspace"
+DEPLOY_SOURCE="path/to/tempfolder/docs/.vuepress/dist/*"
+
+shopt -s extglob
+
+while read oldrev newrev ref
+do
+        if [ "$ref" = "refs/heads/$BRANCH" ];
+        then
+                echo "Ref $ref received. Deploying ${BRANCH} branch to production..."
+                git --work-tree=$TARGET --git-dir=$GIT_DIR checkout -f $BRANCH
+
+                cd $TARGET
+                echo "Running npm install.."
+                npm install
+
+                cd docs
+                echo "Building vuepress.."
+                npm run build
+
+                cd $DEPLOY_TARGET
+                echo "Removing old files.."
+                rm -rf !(error|stats|robots.txt)
+
+                echo "Deploying.."
+                mv -v $DEPLOY_SOURCE $DEPLOY_TARGET
+                echo "done."
+
+
+        else
+                echo "Ref $ref received. Doing nothing: only the ${BRANCH} branch may be deployed on this server."
+        fi
+done
+
